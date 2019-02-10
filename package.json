@@ -1,0 +1,19 @@
+{
+    "name": "ParticleEngine",
+    "version": "1.0.0",
+    "description": "",
+    "main": "ParticleEngine.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "parcel index.html --no-source-maps"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "typescript": "^3.3.3"
+    },
+    "dependencies": {
+        "three": "^0.101.1"
+    }
+}
