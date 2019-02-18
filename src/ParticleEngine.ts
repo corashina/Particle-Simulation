@@ -1,12 +1,13 @@
+import * as THREE from 'three';
 import { VertexShader } from './VertexShader';
 import { FragmentShader } from './FragmentShader';
-import * as THREE from 'three';
+console.log(new THREE.Vector3())
 
 class ParticleEngine {
 
-  position: THREE.Vector3 = new THREE.Color();
+  position: THREE.Vector3 = new THREE.Vector3();
   velocity: THREE.Vector3 = new THREE.Vector3();
-  color: THREE.Color = new THREE.Vector3();
+  color: THREE.Color = new THREE.Color();
   time: number = 0;
   particles: number = 0;
   max: number = 10000;
@@ -16,9 +17,9 @@ class ParticleEngine {
   material: THREE.ShaderMaterial;
   geometry: THREE.BufferGeometry;
 
-  add;
-  spawn;
-  update;
+  add: any;
+  spawn: any;
+  update: any;
 
   constructor() {
     THREE.Object3D.apply(this);
@@ -122,3 +123,5 @@ ParticleEngine.prototype.update = function (time: number): void {
 }
 
 ParticleEngine.prototype = Object.create(THREE.Object3D.prototype);
+
+export default ParticleEngine;
