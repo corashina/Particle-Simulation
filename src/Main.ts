@@ -21,16 +21,6 @@ function init(): void {
 
     scene.add(particleSystem);
 
-    options = {
-        position: new THREE.Vector3(),
-        positionRandomness: .3,
-        velocityRandomness: .5,
-        colorRandomness: .2,
-        lifetime: 1,
-        size: 5,
-        sizeRandomness: 1
-    };
-
     renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -45,10 +35,7 @@ function animate(): void {
 
     tick += delta;
 
-    options.position.x = Math.sin(tick * 1.5) * 20;
-    options.position.y = Math.cos(tick * 1.5) * 20;
-
-    for (var i = 0; i < 10000 * delta; i++) particleSystem.spawn(options);
+    for (var i = 0; i < 1000 * delta; i++) particleSystem.spawn(options);
 
     particleSystem.update(tick);
     render();

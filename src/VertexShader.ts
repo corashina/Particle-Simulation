@@ -24,13 +24,13 @@ const VertexShader: string = `
 
     	lifeLeft = 1.0 - ( timeElapsed / life );
 
-    	gl_PointSize = ( uScale * size ) * lifeLeft;
+    	gl_PointSize = ( uScale * size ) * lifeLeft ;
 
-    	v.x = ( velocity.x - 0.5 ) * 3.0;
-    	v.y = ( velocity.y - 0.5 ) * 3.0;
-    	v.z = ( velocity.z - 0.5 ) * 3.0;
+    	v.x = ( velocity.x - 0.5 ) * 5.0;
+    	v.y = ( velocity.y - 0.5 ) * 5.0;
+    	v.z = ( velocity.z - 0.5 ) * 5.0;
 
-    	newPosition = positionStart + ( v * 10.0 ) * timeElapsed;
+    	newPosition = positionStart + ( v * 1.0 ) * timeElapsed;
 
     	newPosition = mix( newPosition, newPosition + vec3( 0.1, 0.1, 0.1), ( timeElapsed / life ) );
 
@@ -44,7 +44,7 @@ const VertexShader: string = `
 
     	} else {
 
-    		gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    		gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.0 );
     		lifeLeft = 0.0;
     		gl_PointSize = 0.0;
 

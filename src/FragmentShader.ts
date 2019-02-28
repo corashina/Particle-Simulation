@@ -13,7 +13,7 @@ const FragmentShader: string = `
 
     void main() {
 
-    	float alpha = 0.;
+    	float alpha = 0.0;
 
     	if( lifeLeft > 0.995 ) {
 
@@ -22,7 +22,7 @@ const FragmentShader: string = `
     	} else alpha = lifeLeft * 0.75;
 
     	vec4 tex = texture2D( tSprite, gl_PointCoord );
-    	gl_FragColor = vec4( vColor.rgb * tex.a, alpha * tex.a );
+    	gl_FragColor = vec4( vColor.rgb * tex.a, 1.0 );
 
     }
 

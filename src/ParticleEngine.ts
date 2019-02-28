@@ -51,7 +51,7 @@ ParticleEngine.prototype.constructor = function () {
     this.material.depthWrite = false;
     this.material.vertexShader = VertexShader;
     this.material.fragmentShader = FragmentShader;
-    this.material.blending = THREE.NoBlending;
+    this.material.blending = THREE.AdditiveBlending;
 
     this.geometry = new THREE.BufferGeometry();
 
@@ -68,62 +68,49 @@ ParticleEngine.prototype.constructor = function () {
 };
 
 
-ParticleEngine.prototype.spawn = function (options): void {
+ParticleEngine.prototype.spawn = function (): void {
 
-    var positionStartAttribute = this.geometry.getAttribute('positionStart');
-    var startTimeAttribute = this.geometry.getAttribute('startTime');
-    var velocityAttribute = this.geometry.getAttribute('velocity');
-    var colorAttribute = this.geometry.getAttribute('color');
-    var sizeAttribute = this.geometry.getAttribute('size');
-    var lifeAttribute = this.geometry.getAttribute('life');
+    let positionStartAttribute = this.geometry.getAttribute('positionStart');
+    let startTimeAttribute = this.geometry.getAttribute('startTime');
+    let velocityAttribute = this.geometry.getAttribute('velocity');
+    let colorAttribute = this.geometry.getAttribute('color');
+    let sizeAttribute = this.geometry.getAttribute('size');
+    let lifeAttribute = this.geometry.getAttribute('life');
 
-    options = options || {};
-
-    this.position = options.position !== undefined ? this.position.copy(options.position) : this.position.set(0, 0, 0);
+    this.position = this.position.set(0, 0, 0);
     this.velocity = new THREE.Vector3();
     this.color = this.color.set(0xff0000);
 
-    var positionRandomness = options.positionRandomness || 0;
-    var velocityRandomness = options.velocityRandomness || 0;
-    var colorRandomness = options.colorRandomness || 1;
-    var life = options.life || 5;
-    var size = options.size || 10;
-    var sizeRandomness = options.sizeRandomness || 0;
-
-    var i = this.particles;
+    let i = this.particles;
 
     // Position
-    positionStartAttribute.array[i * 3 + 0] = this.position.x + (Math.random() * positionRandomness);
-    positionStartAttribute.array[i * 3 + 1] = this.position.y + (Math.random() * positionRandomness);
-    positionStartAttribute.array[i * 3 + 2] = this.position.z + (Math.random() * positionRandomness);
+    positionStartAttribute.array[i * 3 + 0] = this.position.x + ((Math.random() - 0.5) * 50);
+    positionStartAttribute.array[i * 3 + 1] = this.position.y + ((Math.random() - 0.5) * 50);
+    positionStartAttribute.array[i * 3 + 2] = this.position.z + ((Math.random() - 0.5) * 50);
 
     // Velocity
-    var maxVel = 2;
+    let maxVel = 2;
 
-    var velX = this.velocity.x + Math.random() * velocityRandomness;
-    var velY = this.velocity.y + Math.random() * velocityRandomness;
-    var velZ = this.velocity.z + Math.random() * velocityRandomness;
+    let velX = this.velocity.x + (Math.random() - 0.5) * 10.0;
+    let velY = this.velocity.y + (Math.random() - 0.5) * 10.0;
+    let velZ = this.velocity.z + (Math.random() - 0.5) * 10.0;
 
-    velX = THREE.Math.clamp((velX - (- maxVel)) / (maxVel - (- maxVel)), 0, 1);
-    velY = THREE.Math.clamp((velY - (- maxVel)) / (maxVel - (- maxVel)), 0, 1);
-    velZ = THREE.Math.clamp((velZ - (- maxVel)) / (maxVel - (- maxVel)), 0, 1);
+    velX = THREE.Math.clamp((velX + maxVel) / (maxVel + maxVel), 0, 2);
+    velY = THREE.Math.clamp((velY + maxVel) / (maxVel + maxVel), 0, 2);
+    velZ = THREE.Math.clamp((velZ + maxVel) / (maxVel + maxVel), 0, 2);
 
     velocityAttribute.array[i * 3 + 0] = velX;
     velocityAttribute.array[i * 3 + 1] = velY;
     velocityAttribute.array[i * 3 + 2] = velZ;
 
     // Color
-    this.color.r = THREE.Math.clamp(this.color.r + Math.random() * colorRandomness, 0, 1);
-    this.color.g = THREE.Math.clamp(this.color.g + Math.random() * colorRandomness, 0, 1);
-    this.color.b = THREE.Math.clamp(this.color.b + Math.random() * colorRandomness, 0, 1);
+    colorAttribute.array[i * 3 + 0] = Math.random();
+    colorAttribute.array[i * 3 + 1] = Math.random();
+    colorAttribute.array[i * 3 + 2] = Math.random();
 
-    colorAttribute.array[i * 3 + 0] = this.color.r;
-    colorAttribute.array[i * 3 + 1] = this.color.g;
-    colorAttribute.array[i * 3 + 2] = this.color.b;
-
-    // turbulence, size, life and starttime
-    sizeAttribute.array[i] = size + Math.random() * sizeRandomness;
-    lifeAttribute.array[i] = life;
+    // Turbulence
+    sizeAttribute.array[i] = 5 + Math.random() * 10.0;
+    lifeAttribute.array[i] = 1;
     startTimeAttribute.array[i] = this.time + Math.random() * 2e-2;
 
     // Count
