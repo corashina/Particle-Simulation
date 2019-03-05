@@ -63,7 +63,8 @@ ParticleEngine.prototype.constructor = function () {
     this.geometry.addAttribute('size', new THREE.BufferAttribute(new Float32Array(this.limit), 1));
     this.geometry.addAttribute('life', new THREE.BufferAttribute(new Float32Array(this.limit), 1));
 
-    this.add(new THREE.Points(this.geometry, this.material));
+    this.points = new THREE.Points(this.geometry, this.material);
+    this.add(this.points);
 
 };
 
@@ -108,7 +109,7 @@ ParticleEngine.prototype.spawn = function (): void {
     colorAttribute.array[i * 3 + 1] = Math.random();
     colorAttribute.array[i * 3 + 2] = Math.random();
 
-    // Turbulence
+    // Size
     sizeAttribute.array[i] = 5 + Math.random() * 10.0;
     lifeAttribute.array[i] = 1;
     startTimeAttribute.array[i] = this.time + Math.random() * 2e-2;
