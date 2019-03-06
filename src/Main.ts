@@ -13,12 +13,12 @@ init();
 animate();
 
 function init(): void {
+
     camera = new THREE.PerspectiveCamera(28, window.innerWidth / window.innerHeight, 1, 10000);
     camera.position.z = 200;
-
     scene = new THREE.Scene();
-    particleSystem = new ParticleEngine();
 
+    particleSystem = new ParticleEngine();
     scene.add(particleSystem);
 
     renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });

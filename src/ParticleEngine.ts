@@ -8,12 +8,11 @@ class ParticleEngine {
     velocity: THREE.Vector3 = new THREE.Vector3();
     color: THREE.Color = new THREE.Color();
 
-    limit: number = 1000000;
+    limit: number = 10000;
     particles: number = 0;
     count: number = 0;
     time: number = 0;
 
-    texture: THREE.Texture;
     material: THREE.ShaderMaterial;
     geometry: THREE.BufferGeometry;
 
@@ -32,9 +31,6 @@ ParticleEngine.prototype.constructor = function () {
 
     THREE.Object3D.apply(this);
 
-    const textureLoader: THREE.TextureLoader = new THREE.TextureLoader();
-    const particleSpriteTex = textureLoader.load('particle2.png');
-
     this.material = new THREE.ShaderMaterial({
         uniforms: {
             'uTime': {
@@ -44,11 +40,10 @@ ParticleEngine.prototype.constructor = function () {
                 value: 1.0
             },
             'tSprite': {
-                value: particleSpriteTex
+                value: new THREE.TextureLoader().load('particle.png')
             }
         }
-    })
-    this.material.depthWrite = false;
+    });
     this.material.vertexShader = VertexShader;
     this.material.fragmentShader = FragmentShader;
     this.material.blending = THREE.AdditiveBlending;
@@ -79,8 +74,7 @@ ParticleEngine.prototype.spawn = function (): void {
     let lifeAttribute = this.geometry.getAttribute('life');
 
     this.position = this.position.set(0, 0, 0);
-    this.velocity = new THREE.Vector3();
-    this.color = this.color.set(0xff0000);
+
 
     let i = this.particles;
 
@@ -90,19 +84,9 @@ ParticleEngine.prototype.spawn = function (): void {
     positionStartAttribute.array[i * 3 + 2] = this.position.z + ((Math.random() - 0.5) * 50);
 
     // Velocity
-    let maxVel = 2;
-
-    let velX = this.velocity.x + (Math.random() - 0.5) * 10.0;
-    let velY = this.velocity.y + (Math.random() - 0.5) * 10.0;
-    let velZ = this.velocity.z + (Math.random() - 0.5) * 10.0;
-
-    velX = THREE.Math.clamp((velX + maxVel) / (maxVel + maxVel), 0, 2);
-    velY = THREE.Math.clamp((velY + maxVel) / (maxVel + maxVel), 0, 2);
-    velZ = THREE.Math.clamp((velZ + maxVel) / (maxVel + maxVel), 0, 2);
-
-    velocityAttribute.array[i * 3 + 0] = velX;
-    velocityAttribute.array[i * 3 + 1] = velY;
-    velocityAttribute.array[i * 3 + 2] = velZ;
+    velocityAttribute.array[i * 3 + 0] = THREE.Math.clamp((Math.random() - 0.5) * 10.0, 0, 1);
+    velocityAttribute.array[i * 3 + 1] = THREE.Math.clamp((Math.random() - 0.5) * 10.0, 0, 1);
+    velocityAttribute.array[i * 3 + 2] = THREE.Math.clamp((Math.random() - 0.5) * 10.0, 0, 1);
 
     // Color
     colorAttribute.array[i * 3 + 0] = Math.random();
@@ -112,7 +96,7 @@ ParticleEngine.prototype.spawn = function (): void {
     // Size
     sizeAttribute.array[i] = 5 + Math.random() * 10.0;
     lifeAttribute.array[i] = 1;
-    startTimeAttribute.array[i] = this.time + Math.random() * 2e-2;
+    startTimeAttribute.array[i] = this.time;
 
     // Count
     this.particles++;

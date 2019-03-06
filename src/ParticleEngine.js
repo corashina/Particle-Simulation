@@ -15,7 +15,7 @@ var ParticleEngine = /** @class */ (function () {
         this.position = new THREE.Vector3();
         this.velocity = new THREE.Vector3();
         this.color = new THREE.Color();
-        this.limit = 1000000;
+        this.limit = 10000;
         this.particles = 0;
         this.count = 0;
         this.time = 0;
@@ -26,8 +26,6 @@ var ParticleEngine = /** @class */ (function () {
 ParticleEngine.prototype = Object.create(THREE.Object3D.prototype);
 ParticleEngine.prototype.constructor = function () {
     THREE.Object3D.apply(this);
-    var textureLoader = new THREE.TextureLoader();
-    var particleSpriteTex = textureLoader.load('particle2.png');
     this.material = new THREE.ShaderMaterial({
         uniforms: {
             'uTime': {
@@ -37,11 +35,10 @@ ParticleEngine.prototype.constructor = function () {
                 value: 1.0
             },
             'tSprite': {
-                value: particleSpriteTex
+                value: new THREE.TextureLoader().load('particle.png')
             }
         }
     });
-    this.material.depthWrite = false;
     this.material.vertexShader = VertexShader_1.VertexShader;
     this.material.fragmentShader = FragmentShader_1.FragmentShader;
     this.material.blending = THREE.AdditiveBlending;
@@ -53,7 +50,8 @@ ParticleEngine.prototype.constructor = function () {
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(this.limit * 3), 3));
     this.geometry.addAttribute('size', new THREE.BufferAttribute(new Float32Array(this.limit), 1));
     this.geometry.addAttribute('life', new THREE.BufferAttribute(new Float32Array(this.limit), 1));
-    this.add(new THREE.Points(this.geometry, this.material));
+    this.points = new THREE.Points(this.geometry, this.material);
+    this.add(this.points);
 };
 ParticleEngine.prototype.spawn = function () {
     var positionStartAttribute = this.geometry.getAttribute('positionStart');
@@ -63,32 +61,23 @@ ParticleEngine.prototype.spawn = function () {
     var sizeAttribute = this.geometry.getAttribute('size');
     var lifeAttribute = this.geometry.getAttribute('life');
     this.position = this.position.set(0, 0, 0);
-    this.velocity = new THREE.Vector3();
-    this.color = this.color.set(0xff0000);
     var i = this.particles;
     // Position
     positionStartAttribute.array[i * 3 + 0] = this.position.x + ((Math.random() - 0.5) * 50);
     positionStartAttribute.array[i * 3 + 1] = this.position.y + ((Math.random() - 0.5) * 50);
     positionStartAttribute.array[i * 3 + 2] = this.position.z + ((Math.random() - 0.5) * 50);
     // Velocity
-    var maxVel = 2;
-    var velX = this.velocity.x + (Math.random() - 0.5) * 10.0;
-    var velY = this.velocity.y + (Math.random() - 0.5) * 10.0;
-    var velZ = this.velocity.z + (Math.random() - 0.5) * 10.0;
-    velX = THREE.Math.clamp((velX + maxVel) / (maxVel + maxVel), 0, 2);
-    velY = THREE.Math.clamp((velY + maxVel) / (maxVel + maxVel), 0, 2);
-    velZ = THREE.Math.clamp((velZ + maxVel) / (maxVel + maxVel), 0, 2);
-    velocityAttribute.array[i * 3 + 0] = velX;
-    velocityAttribute.array[i * 3 + 1] = velY;
-    velocityAttribute.array[i * 3 + 2] = velZ;
+    velocityAttribute.array[i * 3 + 0] = THREE.Math.clamp((Math.random() - 0.5) * 10.0, 0, 1);
+    velocityAttribute.array[i * 3 + 1] = THREE.Math.clamp((Math.random() - 0.5) * 10.0, 0, 1);
+    velocityAttribute.array[i * 3 + 2] = THREE.Math.clamp((Math.random() - 0.5) * 10.0, 0, 1);
     // Color
     colorAttribute.array[i * 3 + 0] = Math.random();
     colorAttribute.array[i * 3 + 1] = Math.random();
     colorAttribute.array[i * 3 + 2] = Math.random();
-    // Turbulence
+    // Size
     sizeAttribute.array[i] = 5 + Math.random() * 10.0;
     lifeAttribute.array[i] = 1;
-    startTimeAttribute.array[i] = this.time + Math.random() * 2e-2;
+    startTimeAttribute.array[i] = this.time;
     // Count
     this.particles++;
     this.count++;

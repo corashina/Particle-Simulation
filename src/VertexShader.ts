@@ -45,8 +45,6 @@ const VertexShader: string = `
     	} else {
 
     		gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.0 );
-    		lifeLeft = 0.0;
-    		gl_PointSize = 0.0;
 
     	}
 
