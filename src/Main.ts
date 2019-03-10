@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import ParticleEngine from './ParticleEngine';
 
-var camera: THREE.Camera,
+var camera: THREE.PerspectiveCamera,
     scene: THREE.Scene,
     renderer: THREE.WebGLRenderer,
     particleSystem: any,
@@ -14,8 +14,8 @@ animate();
 
 function init(): void {
 
-    camera = new THREE.PerspectiveCamera(28, window.innerWidth / window.innerHeight, 1, 10000);
-    camera.position.z = 200;
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.z = 100;
     scene = new THREE.Scene();
 
     particleSystem = new ParticleEngine();
@@ -24,6 +24,8 @@ function init(): void {
     renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('canvas') });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+
+    window.addEventListener('resize', onWindowResize, false);
 
 }
 
@@ -45,5 +47,13 @@ function animate(): void {
 function render(): void {
 
     renderer.render(scene, camera);
+
+}
+
+function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
 }
