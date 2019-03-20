@@ -75,7 +75,6 @@ ParticleEngine.prototype.spawn = function (): void {
 
     this.position = this.position.set(0, 0, 0);
 
-
     let i = this.particles;
 
     // Position

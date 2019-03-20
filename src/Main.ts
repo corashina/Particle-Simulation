@@ -5,7 +5,6 @@ var camera: THREE.PerspectiveCamera,
     scene: THREE.Scene,
     renderer: THREE.WebGLRenderer,
     particleSystem: any,
-    options: any,
     tick: number = 0,
     clock: THREE.Clock = new THREE.Clock();
 
@@ -37,7 +36,7 @@ function animate(): void {
 
     tick += delta;
 
-    for (var i = 0; i < 1000 * delta; i++) particleSystem.spawn(options);
+    for (var i = 0; i < 1000 * delta; i++) particleSystem.spawn();
 
     particleSystem.update(tick);
     render();
